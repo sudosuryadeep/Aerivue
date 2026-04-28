@@ -16,6 +16,12 @@ export const metadata = {
     "Next.js Developer",
     "Frontend Developer",
   ],
+
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
