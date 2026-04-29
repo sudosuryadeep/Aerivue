@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence,Variants  } from "framer-motion";
 import {
   Download, MapPin, ExternalLink, Search,
   Loader2, Satellite, Globe,
@@ -205,10 +205,18 @@ export default function NameSearch() {
     hidden: { opacity: 0 },
     show: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
   };
-  const cardVariant = {
-    hidden: { opacity: 0, y: 20, scale: 0.85 },
-    show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 280, damping: 22 } },
-  };
+  const cardVariant: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 120,
+      damping: 14,
+    },
+  },
+};
 
   const letters = name.replace(/ /g, "");
 
