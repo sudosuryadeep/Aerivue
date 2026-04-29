@@ -11,6 +11,7 @@ type LocationType = { title: string; coordinates: string; link: string };
 type ImageResult = { key: string; data: LocationType };
 
 /* ── Stars (outside component — never re-randomize) ── */
+// ── Stars — CSS only, NO Framer Motion ──
 const STARS = Array.from({ length: 70 }, (_, i) => ({
   id: i,
   size: Math.random() * 1.8 + 0.4,
@@ -21,19 +22,58 @@ const STARS = Array.from({ length: 70 }, (_, i) => ({
   opacity: Math.random() * 0.5 + 0.1,
 }));
 
+// ── Stars — client-only, no SSR mismatch ──
 function StarField() {
+  const [stars, setStars] = useState<{
+    id: number; size: number; left: number; top: number;
+    duration: number; delay: number; opacity: number;
+  }[]>([]);
+
+  useEffect(() => {
+    setStars(
+      Array.from({ length: 70 }, (_, i) => ({
+        id: i,
+        size: Math.random() * 1.8 + 0.4,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        duration: Math.random() * 5 + 2,
+        delay: Math.random() * 5,
+        opacity: Math.random() * 0.5 + 0.1,
+      }))
+    );
+  }, []); // ← sirf ek baar, client mount hone par
+
+  if (!stars.length) return null; // server pe kuch render hi nahi
+
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {STARS.map((s) => (
-        <motion.span
-          key={s.id}
-          className="absolute rounded-full bg-white"
-          style={{ width: s.size, height: s.size, left: `${s.left}%`, top: `${s.top}%` }}
-          animate={{ opacity: [s.opacity, 0.05, s.opacity * 1.4, s.opacity] }}
-          transition={{ duration: s.duration, repeat: Infinity, delay: s.delay, ease: "easeInOut" }}
-        />
-      ))}
-    </div>
+    <>
+      <style>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: var(--op); }
+          50%       { opacity: 0.04; }
+        }
+      `}</style>
+      <div
+        className="fixed inset-0 overflow-hidden pointer-events-none"
+        aria-hidden="true"
+      >
+        {stars.map((s) => (
+          <span
+            key={s.id}
+            className="absolute rounded-full bg-white"
+            style={{
+              width:  `${s.size}px`,
+              height: `${s.size}px`,
+              left:   `${s.left}%`,
+              top:    `${s.top}%`,
+              "--op": s.opacity,
+              opacity: s.opacity,
+              animation: `twinkle ${s.duration}s ${s.delay}s infinite ease-in-out`,
+            } as React.CSSProperties}
+          />
+        ))}
+      </div>
+    </>
   );
 }
 
