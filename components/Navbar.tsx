@@ -6,6 +6,7 @@ const LINKS = [
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Name-On-Map", href: "/name-on-map" },
 ];
 
 const ACCENTS = ["#FF2E63", "#8B5CF6", "#22D3EE"];
