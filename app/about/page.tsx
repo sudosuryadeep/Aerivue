@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: "What makes Aerivue's design different?",
-    a: "We don't use generic templates or off-the-shelf themes. Every Aerivue design starts from scratch — informed by your brand, your audience, and your goals. We lean towards clean, minimal aesthetics with intentional typography, deliberate spacing, and motion that adds purpose. Our designs feel premium without being overdesigned.",
+    a: "We don't use generic templates or off-the-shelf themes. Every Aerivue design starts from scratch — informed by your brand, your audience, and your goals. We lean towards bold, intentional typography, deliberate color, and motion that adds purpose. Our designs feel alive without being noisy.",
   },
   {
     q: "Does Aerivue offer maintenance after launch?",
@@ -137,110 +137,146 @@ const values = [
   },
 ];
 
+const ACCENTS = ["#FF2E63", "#8B5CF6", "#22D3EE", "#FFC857"];
+
+function PlusIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="faq-plus" aria-hidden="true">
+      <path d="M7 1V13M1 7H13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#080808] text-white overflow-x-hidden">
+    <main className="min-h-screen bg-[#0B0B14] text-[#F5F3FF] overflow-x-hidden">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap');
-        .f-syne  { font-family: 'Syne', sans-serif; }
-        .f-mono  { font-family: 'DM Mono', monospace; }
-        .f-outfit{ font-family: 'Outfit', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        .f-display { font-family: 'Anton', sans-serif; }
+        .f-body    { font-family: 'Space Grotesk', sans-serif; }
+        .f-mono    { font-family: 'JetBrains Mono', monospace; }
 
-        @keyframes fadeUp   { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:none} }
-        @keyframes lineGrow { from{transform:scaleX(0)} to{transform:scaleX(1)} }
-        @keyframes orbPulse { 0%,100%{opacity:.04;transform:scale(1)} 50%{opacity:.07;transform:scale(1.08)} }
-        @keyframes ticker   { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0} }
+        @keyframes fadeUp    { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+        @keyframes floatBlob { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-25px) scale(1.06)} }
+        @keyframes gradShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes ticker    { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        @keyframes speedIn   { from{opacity:0;transform:scaleX(0)} to{opacity:1;transform:scaleX(1)} }
+        @keyframes glowPulse { 0%,100%{box-shadow:0 0 22px 2px rgba(255,46,99,.35)} 50%{box-shadow:0 0 34px 6px rgba(139,92,246,.4)} }
 
-        .a1{animation:fadeUp .7s ease both .05s}
-        .a2{animation:fadeUp .7s ease both .15s}
-        .a3{animation:fadeUp .7s ease both .25s}
-        .a4{animation:fadeUp .7s ease both .35s}
+        .a1{animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both .05s}
+        .a2{animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both .16s}
+        .a3{animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both .27s}
+        .a4{animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both .38s}
 
-        .orb{position:absolute;border-radius:9999px;filter:blur(130px);pointer-events:none;animation:orbPulse 9s ease-in-out infinite}
-        .gridlines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:80px 80px;pointer-events:none}
+        .grad-text{
+          background: linear-gradient(90deg,#FF2E63,#8B5CF6 45%,#22D3EE 90%);
+          background-size: 200% auto;
+          -webkit-background-clip: text; background-clip: text; color: transparent;
+          animation: gradShift 6s ease-in-out infinite;
+        }
+
+        .halftone{
+          position:absolute; inset:0; pointer-events:none;
+          background-image: radial-gradient(rgba(245,243,255,.09) 1.4px, transparent 1.4px);
+          background-size: 16px 16px;
+          -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 40%, #000 0%, transparent 75%);
+                  mask-image: radial-gradient(ellipse 60% 55% at 50% 40%, #000 0%, transparent 75%);
+        }
+
+        .blob{ position:absolute; border-radius:9999px; filter:blur(90px); pointer-events:none; animation:floatBlob 11s ease-in-out infinite; }
+
+        .speedlines{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+        .speedline{ position:absolute; height:2px; background:linear-gradient(90deg,transparent,rgba(245,243,255,.4),transparent); transform-origin:left center; animation:speedIn .8s cubic-bezier(.16,1,.3,1) both; }
 
         .ticker-wrap{overflow:hidden}
-        .ticker-track{display:flex;width:max-content;animation:ticker 28s linear infinite}
+        .ticker-track{display:flex; width:max-content; animation:ticker 26s linear infinite}
 
-        details.faq summary{list-style:none;cursor:pointer}
-        details.faq summary::-webkit-details-marker{display:none}
-        details.faq[open] .faq-plus{transform:rotate(45deg)}
-        .faq-plus{transition:transform .3s ease;display:inline-block;line-height:1}
+        .cta-glow{ animation: glowPulse 3.5s ease-in-out infinite; }
 
-        details.faq{border-color:rgba(255,255,255,.06);transition:border-color .2s}
-        details.faq:hover{border-color:rgba(255,255,255,.12)}
-        details.faq[open]{border-color:rgba(255,255,255,.13)}
+        /* comic / manga panel */
+        .panel{
+          border:2px solid rgba(245,243,255,.85);
+          background:#12121D;
+          transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s cubic-bezier(.16,1,.3,1);
+        }
+        .panel:hover{ transform: translate(-3px,-3px); }
 
-        .stack-pill{transition:background .2s,border-color .2s,transform .2s}
-        .stack-pill:hover{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.18);transform:translateY(-2px)}
+        details.faq summary{ list-style:none; cursor:pointer; }
+        details.faq summary::-webkit-details-marker{ display:none; }
+        .faq-plus{ transition: transform .35s cubic-bezier(.16,1,.3,1); transform-origin:50% 50%; }
+        details.faq[open] .faq-plus{ transform: rotate(45deg); }
+        .faq-icon-wrap{ transition: background .2s ease, transform .2s ease; }
+        details.faq[open] .faq-icon-wrap{ transform: rotate(0deg) scale(1.05); }
 
-        .val-card{transition:background .25s,border-color .25s}
-        .val-card:hover{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.1)}
+        .stack-pill{ transition: transform .18s ease, box-shadow .18s ease; }
+        .stack-pill:hover{ transform: translate(-3px,-3px); }
 
-        .clink{transition:background .2s,border-color .2s,color .2s}
-        .clink:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.18);color:#fff}
-
-        .hero-line{position:absolute;bottom:2px;left:0;right:0;height:3px;background:#fff;transform-origin:left;animation:lineGrow .9s cubic-bezier(.16,1,.3,1) .65s both}
-        .cursor{animation:blink 1s step-end infinite}
+        .clink{ transition: transform .18s ease, box-shadow .18s ease; }
+        .clink:hover{ transform: translate(-3px,-3px); }
       `}</style>
 
       {/* ─── HERO ─── */}
       <section className="relative min-h-[94vh] flex flex-col justify-center px-6 md:px-14 lg:px-24 pt-28 pb-16 overflow-hidden">
-        <div className="gridlines" />
-        <div className="orb w-[520px] h-[520px] bg-white" style={{top:'-110px',left:'-160px'}} />
-        <div className="orb w-[400px] h-[400px] bg-white" style={{bottom:'-60px',right:'-120px',animationDelay:'5s'}} />
+        <div className="halftone" />
+        <div className="blob w-[460px] h-[460px]" style={{ top: "-90px", left: "-120px", background: "#FF2E63", opacity: 0.28 }} />
+        <div className="blob w-[420px] h-[420px]" style={{ bottom: "-80px", right: "-100px", background: "#22D3EE", opacity: 0.22, animationDelay: "3.5s" }} />
+        <div className="blob w-[300px] h-[300px]" style={{ top: "30%", left: "45%", background: "#8B5CF6", opacity: 0.18, animationDelay: "6s" }} />
+
+        <div className="speedlines">
+          <span className="speedline" style={{ top: "18%", left: 0, width: "38%", animationDelay: ".7s" }} />
+          <span className="speedline" style={{ top: "26%", left: 0, width: "55%", animationDelay: ".85s" }} />
+          <span className="speedline" style={{ top: "70%", left: 0, width: "30%", animationDelay: "1s" }} />
+        </div>
 
         <div className="relative z-10 max-w-5xl">
-          <p className="f-mono text-[11px] tracking-[.3em] text-white/25 uppercase mb-8 a1">
-            — Who we are / aerivue.dev/about
+          <p className="f-mono text-[11px] tracking-[.3em] text-[#22D3EE] uppercase mb-8 a1">
+            ⚡ who we are — aerivue.dev/about
           </p>
 
-          <h1 className="f-syne leading-[1.05] tracking-tight mb-8 a2"
-              style={{fontSize:'clamp(3rem,8vw,7rem)',fontWeight:800}}>
-            We are{' '}
-            <span className="relative inline-block">
-              Aerivue
-              <span className="hero-line" />
-            </span>
-            .<br />
-            <span className="text-white/20">A web studio</span><br />
-            built for the{' '}
-            <span className="f-outfit italic font-light text-white/50">modern web.</span>
+          <h1 className="f-display uppercase leading-[0.95] tracking-tight mb-8 a2" style={{ fontSize: "clamp(3rem,9vw,7.5rem)" }}>
+            We are <span className="grad-text">Aerivue</span>
+            <br />
+            <span style={{ WebkitTextStroke: "1.5px #F5F3FF", color: "transparent" }}>a web studio</span>
+            <br />
+            built for the modern web.
           </h1>
 
-          <p className="f-outfit text-white/45 text-lg md:text-xl max-w-2xl leading-relaxed a3">
-            We design and engineer digital products that are fast, SEO-dominant, and visually precise.
-            No templates. No bloat. Just clean, intentional code that works.
+          <p className="f-body text-[#F5F3FF]/60 text-lg md:text-xl max-w-2xl leading-relaxed a3">
+            We design and engineer digital products that are fast, SEO-dominant, and visually loud in all the right places. No templates. No bloat. Just intentional code that works.
           </p>
 
           <div className="flex flex-wrap gap-4 mt-10 a4">
-            <a href="https://t.me/aerivue" target="_blank" rel="noopener noreferrer"
-               className="f-syne font-semibold text-sm px-7 py-3.5 bg-white text-black rounded-full hover:bg-white/90 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-white/10">
+            <a
+              href="https://t.me/aerivue" target="_blank" rel="noopener noreferrer"
+              className="cta-glow f-body font-bold text-sm px-7 py-3.5 rounded-full text-[#0B0B14] hover:scale-[1.03] transition-transform duration-200"
+              style={{ background: "linear-gradient(90deg,#FF2E63,#8B5CF6)" }}
+            >
               Telegram → t.me/aerivue
             </a>
-            <a href="mailto:hello@aerivue.dev"
-               className="f-syne font-semibold text-sm px-7 py-3.5 border border-white/15 text-white/60 rounded-full hover:border-white/30 hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+            <a
+              href="mailto:hello@aerivue.dev"
+              className="f-body font-bold text-sm px-7 py-3.5 border-2 border-[#F5F3FF]/70 text-[#F5F3FF] rounded-full hover:bg-[#F5F3FF]/10 transition-all duration-200"
+            >
               hello@aerivue.dev
             </a>
           </div>
         </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-20">
-          <span className="f-mono text-[10px] tracking-widest uppercase">scroll</span>
-          <div className="w-px h-10 bg-white/40" />
-        </div>
       </section>
 
       {/* ─── TICKER ─── */}
-      <div className="ticker-wrap border-y border-white/[.05] py-3 bg-white/[.015]">
-        <div className="ticker-track f-mono text-[11px] tracking-[.18em] text-white/18 uppercase select-none">
-          {[0,1].map(k=>(
+      <div className="ticker-wrap border-y-2 border-[#F5F3FF]/15 py-3" style={{ background: "linear-gradient(90deg,#1A0F1A,#12121D,#0F1A1D)" }}>
+        <div className="ticker-track f-mono text-[11px] tracking-[.18em] text-[#F5F3FF]/40 uppercase select-none">
+          {[0, 1].map((k) => (
             <span key={k}>
-              {['Next.js 14','·','TypeScript','·','Tailwind CSS','·','SEO Optimized','·',
-                'Node.js','·','MongoDB','·','Vercel','·','Google Search Console','·',
-                'Core Web Vitals','·','Fast. Modern. Minimal.','·','Aerivue','·'
-              ].map((t,j)=><span key={j} className="mx-6">{t}</span>)}
+              {[
+                "Next.js 14", "Ⓐ", "TypeScript", "Ⓐ", "Tailwind CSS", "Ⓐ", "SEO Optimized", "Ⓐ",
+                "Node.js", "Ⓐ", "MongoDB", "Ⓐ", "Vercel", "Ⓐ", "Core Web Vitals", "Ⓐ",
+                "Fast. Bold. Alive.", "Ⓐ", "Aerivue", "Ⓐ",
+              ].map((t, j) => (
+                <span key={j} className="mx-6" style={j % 8 === 1 ? { color: ACCENTS[(j / 2) % ACCENTS.length | 0] } : {}}>
+                  {t}
+                </span>
+              ))}
             </span>
           ))}
         </div>
@@ -249,124 +285,160 @@ export default function AboutPage() {
       {/* ─── FAQ ─── */}
       <section className="px-6 md:px-14 lg:px-24 py-24 max-w-5xl mx-auto">
         <div className="mb-16">
-          <p className="f-mono text-[11px] tracking-[.3em] text-white/22 uppercase mb-4">Everything you need to know</p>
-          <h2 className="f-syne font-bold text-4xl md:text-5xl text-white">Questions &amp; Answers</h2>
+          <p className="f-mono text-[11px] tracking-[.3em] text-[#22D3EE] uppercase mb-4">everything you need to know</p>
+          <h2 className="f-display uppercase text-4xl md:text-6xl">
+            Questions <span className="grad-text">&amp; Answers</span>
+          </h2>
         </div>
 
-        <div className="space-y-2">
-          {faqs.map((faq, i) => (
-            <details key={i} className="faq border border-white/[.06] rounded-2xl overflow-hidden bg-white/[.013]">
-              <summary className="flex items-start justify-between gap-6 px-7 py-6 select-none">
-                <div className="flex items-start gap-5">
-                  <span className="f-mono text-[10px] text-white/18 mt-1 flex-shrink-0 w-5">
-                    {String(i+1).padStart(2,'0')}
+        <div className="space-y-4">
+          {faqs.map((faq, i) => {
+            const color = ACCENTS[i % ACCENTS.length];
+            return (
+              <details
+                key={i}
+                className="faq panel rounded-xl overflow-hidden"
+                style={{ boxShadow: `5px 5px 0 ${color}` }}
+              >
+                <summary className="flex items-center justify-between gap-6 px-6 py-5 select-none">
+                  <div className="flex items-start gap-4">
+                    <span className="f-mono text-[10px] mt-1 flex-shrink-0 w-6" style={{ color }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="f-body font-semibold text-[15px] md:text-[16px] text-[#F5F3FF]/90 leading-snug">
+                      {faq.q}
+                    </span>
+                  </div>
+                  <span
+                    className="faq-icon-wrap flex items-center justify-center w-8 h-8 rounded-full flex-shrink-0 text-[#0B0B14]"
+                    style={{ background: color }}
+                  >
+                    <PlusIcon />
                   </span>
-                  <span className="f-syne font-semibold text-[15px] md:text-[17px] text-white/80 leading-snug">
-                    {faq.q}
-                  </span>
+                </summary>
+                <div className="px-6 pb-6 pl-[3.75rem]">
+                  <div className="w-full h-px mb-4" style={{ background: `${color}55` }} />
+                  <p className="f-body text-[#F5F3FF]/55 text-[14px] leading-[1.85]">{faq.a}</p>
                 </div>
-                <span className="faq-plus text-white/28 text-2xl font-light flex-shrink-0 mt-0.5">+</span>
-              </summary>
-              <div className="px-7 pb-7 pl-[4.5rem]">
-                <div className="w-full h-px bg-white/[.06] mb-5" />
-                <p className="f-outfit text-white/45 text-[15px] leading-[1.9]">{faq.a}</p>
-              </div>
-            </details>
-          ))}
+              </details>
+            );
+          })}
         </div>
       </section>
 
       {/* ─── TECH STACK ─── */}
-      <section className="px-6 md:px-14 lg:px-24 py-20 border-t border-white/[.05]">
+      <section className="px-6 md:px-14 lg:px-24 py-20 border-t-2 border-[#F5F3FF]/10">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
             <div>
-              <p className="f-mono text-[11px] tracking-[.3em] text-white/22 uppercase mb-4">Under the hood</p>
-              <h2 className="f-syne font-bold text-4xl md:text-5xl text-white">Our Stack</h2>
+              <p className="f-mono text-[11px] tracking-[.3em] text-[#FFC857] uppercase mb-4">under the hood</p>
+              <h2 className="f-display uppercase text-4xl md:text-6xl">Our Stack</h2>
             </div>
-            <p className="f-outfit text-white/32 text-sm max-w-xs leading-relaxed">
+            <p className="f-body text-[#F5F3FF]/40 text-sm max-w-xs leading-relaxed">
               Modern, battle-tested tools chosen for performance, developer experience, and longevity.
             </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {stack.map(item => (
-              <div key={item.name} className="stack-pill border border-white/[.07] rounded-xl px-5 py-5 bg-white/[.018]">
-                <div className="f-syne font-semibold text-[15px] text-white/75 mb-1">{item.name}</div>
-                <div className="f-mono text-[11px] text-white/22 tracking-wide">{item.role}</div>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {stack.map((item, i) => {
+              const color = ACCENTS[i % ACCENTS.length];
+              return (
+                <div
+                  key={item.name}
+                  className="stack-pill panel rounded-lg px-5 py-5"
+                  style={{ boxShadow: `4px 4px 0 ${color}` }}
+                >
+                  <div className="f-body font-bold text-[15px] text-[#F5F3FF]/90 mb-1">{item.name}</div>
+                  <div className="f-mono text-[11px] tracking-wide" style={{ color }}>{item.role}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ─── VALUES ─── */}
-      <section className="px-6 md:px-14 lg:px-24 py-20 border-t border-white/[.05]">
+      <section className="px-6 md:px-14 lg:px-24 py-20 border-t-2 border-[#F5F3FF]/10">
         <div className="max-w-5xl mx-auto">
           <div className="mb-14">
-            <p className="f-mono text-[11px] tracking-[.3em] text-white/22 uppercase mb-4">How we operate</p>
-            <h2 className="f-syne font-bold text-4xl md:text-5xl text-white">Our Principles</h2>
+            <p className="f-mono text-[11px] tracking-[.3em] text-[#FF2E63] uppercase mb-4">how we operate</p>
+            <h2 className="f-display uppercase text-4xl md:text-6xl">Our Principles</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[.05] rounded-3xl overflow-hidden">
-            {values.map(v => (
-              <div key={v.num} className="val-card bg-[#080808] border border-transparent px-8 py-8">
-                <div className="f-mono text-[10px] text-white/15 mb-5 tracking-widest">{v.num}</div>
-                <h3 className="f-syne font-semibold text-[16px] text-white/75 mb-3 leading-snug">{v.title}</h3>
-                <p className="f-outfit text-white/32 text-sm leading-relaxed">{v.body}</p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {values.map((v, i) => {
+              const color = ACCENTS[i % ACCENTS.length];
+              return (
+                <div key={v.num} className="panel rounded-xl px-8 py-8" style={{ boxShadow: `5px 5px 0 ${color}` }}>
+                  <div className="f-display text-3xl mb-5" style={{ color }}>{v.num}</div>
+                  <h3 className="f-body font-bold text-[16px] text-[#F5F3FF]/90 mb-3 leading-snug">{v.title}</h3>
+                  <p className="f-body text-[#F5F3FF]/45 text-sm leading-relaxed">{v.body}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ─── FIND US ─── */}
-      <section className="px-6 md:px-14 lg:px-24 py-20 border-t border-white/[.05]">
+      <section className="px-6 md:px-14 lg:px-24 py-20 border-t-2 border-[#F5F3FF]/10">
         <div className="max-w-5xl mx-auto">
           <div className="mb-12">
-            <p className="f-mono text-[11px] tracking-[.3em] text-white/22 uppercase mb-4">Reach out</p>
-            <h2 className="f-syne font-bold text-4xl md:text-5xl text-white">Find Aerivue Online</h2>
+            <p className="f-mono text-[11px] tracking-[.3em] text-[#8B5CF6] uppercase mb-4">reach out</p>
+            <h2 className="f-display uppercase text-4xl md:text-6xl">Find Aerivue Online</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              {label:'Telegram', handle:'t.me/aerivue',             href:'https://t.me/aerivue'},
-              {label:'Email',    handle:'hello@aerivue.dev',        href:'mailto:hello@aerivue.dev'},
-              {label:'Website',  handle:'aerivue.dev',              href:'https://aerivue.dev'},
-              {label:'Portfolio',handle:'aerivue.dev/portfolio',    href:'https://aerivue.dev/portfolio'},
-              {label:'Services', handle:'aerivue.dev/services',     href:'https://aerivue.dev/services'},
-              {label:'Blog',     handle:'aerivue.dev/blog',         href:'https://aerivue.dev/blog'},
-            ].map(c=>(
-              <a key={c.label} href={c.href}
-                 target={c.href.startsWith('http')?'_blank':undefined}
-                 rel="noopener noreferrer"
-                 className="clink border border-white/[.07] rounded-2xl px-6 py-5 bg-white/[.015] text-white/45 block">
-                <div className="f-mono text-[10px] tracking-widest text-white/18 uppercase mb-2">{c.label}</div>
-                <div className="f-syne text-[15px] font-medium">{c.handle}</div>
-              </a>
-            ))}
+              { label: "Telegram", handle: "t.me/aerivue", href: "https://t.me/aerivue" },
+              { label: "Email", handle: "hello@aerivue.dev", href: "mailto:hello@aerivue.dev" },
+              { label: "Website", handle: "aerivue.dev", href: "https://aerivue.dev" },
+              { label: "Portfolio", handle: "aerivue.dev/portfolio", href: "https://aerivue.dev/portfolio" },
+              { label: "Services", handle: "aerivue.dev/services", href: "https://aerivue.dev/services" },
+              { label: "Blog", handle: "aerivue.dev/blog", href: "https://aerivue.dev/blog" },
+            ].map((c, i) => {
+              const color = ACCENTS[i % ACCENTS.length];
+              return (
+                <a
+                  key={c.label}
+                  href={c.href}
+                  target={c.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="clink panel rounded-xl px-6 py-5 block"
+                  style={{ boxShadow: `4px 4px 0 ${color}` }}
+                >
+                  <div className="f-mono text-[10px] tracking-widest uppercase mb-2" style={{ color }}>{c.label}</div>
+                  <div className="f-body text-[15px] font-semibold text-[#F5F3FF]/90">{c.handle}</div>
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ─── CLOSING ─── */}
-      <section className="relative px-6 md:px-14 lg:px-24 py-28 border-t border-white/[.05] overflow-hidden text-center">
-        <div className="gridlines" />
-        <div className="orb w-[600px] h-[600px] bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[.03]" />
+      <section className="relative px-6 md:px-14 lg:px-24 py-28 border-t-2 border-[#F5F3FF]/10 overflow-hidden text-center">
+        <div className="halftone" />
+        <div className="blob w-[560px] h-[560px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ background: "linear-gradient(90deg,#FF2E63,#8B5CF6,#22D3EE)", opacity: 0.14 }} />
         <div className="relative z-10 max-w-4xl mx-auto">
-          <p className="f-mono text-[11px] tracking-[.3em] text-white/20 uppercase mb-8">— Ready to start?</p>
-          <h2 className="f-syne font-bold leading-[1.08] text-white mb-8"
-              style={{fontSize:'clamp(2.4rem,6vw,5.5rem)',fontWeight:800}}>
-            Your next project<br />starts with a message.<span className="cursor text-white/25">_</span>
+          <p className="f-mono text-[11px] tracking-[.3em] text-[#FFC857] uppercase mb-8">— ready to start?</p>
+          <h2 className="f-display uppercase leading-[0.95] mb-8" style={{ fontSize: "clamp(2.4rem,7vw,5.8rem)" }}>
+            Your next project
+            <br />
+            starts with <span className="grad-text">a message.</span>
           </h2>
-          <p className="f-outfit text-white/32 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-            Tell us what you are building. We will tell you how we can make it remarkable.
-            Response guaranteed within 24 hours.
+          <p className="f-body text-[#F5F3FF]/40 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+            Tell us what you are building. We will tell you how we can make it remarkable. Response guaranteed within 24 hours.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="https://t.me/aerivue" target="_blank" rel="noopener noreferrer"
-               className="f-syne font-semibold text-sm px-8 py-4 bg-white text-black rounded-full hover:bg-white/90 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-white/10">
+            <a
+              href="https://t.me/aerivue" target="_blank" rel="noopener noreferrer"
+              className="cta-glow f-body font-bold text-sm px-8 py-4 rounded-full text-[#0B0B14] hover:scale-[1.03] transition-transform duration-200"
+              style={{ background: "linear-gradient(90deg,#FF2E63,#8B5CF6)" }}
+            >
               Message on Telegram
             </a>
-            <a href="mailto:hello@aerivue.dev"
-               className="f-syne font-semibold text-sm px-8 py-4 border border-white/15 text-white/55 rounded-full hover:border-white/30 hover:text-white transition-all duration-200 hover:-translate-y-0.5">
+            <a
+              href="mailto:hello@aerivue.dev"
+              className="f-body font-bold text-sm px-8 py-4 border-2 border-[#F5F3FF]/60 text-[#F5F3FF]/85 rounded-full hover:bg-[#F5F3FF]/10 transition-all duration-200"
+            >
               hello@aerivue.dev
             </a>
           </div>
