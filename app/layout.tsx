@@ -16,7 +16,6 @@ export const metadata = {
     "Next.js Developer",
     "Frontend Developer",
   ],
-
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -27,7 +26,13 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">
+      <body className="bg-[#0B0B14] text-[#F5F3FF]">
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+          .f-display { font-family:'Anton', sans-serif; }
+          .f-body    { font-family:'Space Grotesk', sans-serif; }
+          .f-mono    { font-family:'JetBrains Mono', monospace; }
+        `}</style>
         <Navbar />
         {children}
         <Footer />
